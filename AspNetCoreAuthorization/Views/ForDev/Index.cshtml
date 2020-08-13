@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<h1>Index</h1>
+
+<h2>Hello @User.Identity.Name</h2>
+@foreach (var claim in User.Claims)
+{
+    <li><strong>@claim.Type</strong>: @claim.Value</li>
+}
