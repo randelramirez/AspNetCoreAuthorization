@@ -7,7 +7,6 @@ namespace AspNetCoreAuthorization.Authorization.Claims
 {
     public static class Types
     {
-        public const string DateOfBirth = "DateOfBirth";
 
         public const string EmailConfirmationLinkClaim = "EmailConfirmationLinkClaim";
 

@@ -1,5 +1,4 @@
-﻿using AspNetCoreAuthorization.Authorization.Claims;
-using AspNetCoreAuthorization.Authorization.Requirements;
+﻿using AspNetCoreAuthorization.Authorization.Requirements;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;

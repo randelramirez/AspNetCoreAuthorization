@@ -21,7 +21,7 @@ namespace AspNetCoreAuthorization.Authorization.Claims
             var identity = await base.GenerateClaimsAsync(user);
             // Add the user's locale in the claims (Got to about page)
             identity.AddClaim(new Claim(Claims.Types.Work, user.Work));
-            identity.AddClaim(new Claim(Claims.Types.DateOfBirth, user.BirthDate.ToString()));
+            identity.AddClaim(new Claim(ClaimTypes.DateOfBirth, user.BirthDate.ToString()));
 
             // Get Claims from claims from [AspNetUserClaims] provided by ASP.NET Core Identity
             //identity.AddClaims(await this.UserManager.GetClaimsAsync(user));
