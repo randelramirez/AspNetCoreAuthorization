@@ -7,12 +7,14 @@ namespace AspNetCoreAuthorization.Authorization.Policies
 {
     public static class PoliciesConstants
     {
-        public const string AUTHENTICATED_USER = "AUTHENTICATED_USER";
+        public const string AUTHENTICATED_USER = nameof(AUTHENTICATED_USER);
 
-        public const string IT_PROFESSIONAL = "IT_PROFESSIONAL";
+        public const string IT_PROFESSIONAL = nameof(IT_PROFESSIONAL);
 
-        public const string DEV = "DEV";
+        public const string DEV = nameof(DEV);
 
-        public const string BA = "BA";
+        public const string BA = nameof(BA);
+
+        public const string OLD_ENOUGH = nameof(OLD_ENOUGH);
     }
 }

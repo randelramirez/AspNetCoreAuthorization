@@ -17,7 +17,7 @@ namespace AspNetCoreAuthorization.Controllers
             return Ok("Successful");
         }
 
-        [Authorize("OldEnough")]
+        [Authorize(PoliciesConstants.OLD_ENOUGH)]
         public IActionResult AgeTest()
         {
             return Ok("Successful");

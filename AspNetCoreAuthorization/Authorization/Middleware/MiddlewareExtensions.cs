@@ -75,7 +75,7 @@ namespace AspNetCoreAuthorization.Authorization.Middleware
                 });
 
                 option.AddPolicy(
-                   "OldEnough",
+                   PoliciesConstants.OLD_ENOUGH,
                    policyBuilder => policyBuilder.AddRequirements(
                        new MinimumAgeRequirement(18)
                    ));

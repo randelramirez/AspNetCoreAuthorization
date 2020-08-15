@@ -105,7 +105,7 @@ namespace AspNetCoreAuthorization.Areas.Identity.Pages.Account
                     //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     await _userManager.AddClaimAsync(user, new Claim(Types.EmailConfirmationLinkClaim,$"{HtmlEncoder.Default.Encode(callbackUrl)}"));
-                    await _userManager.AddClaimAsync(user, new Claim(Types.DateOfBirth, user.BirthDate.ToString()));
+                    await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.DateOfBirth, user.BirthDate.ToString()));
                     await _userManager.AddClaimAsync(user, new Claim(Types.Work, user.Work));
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
