@@ -23,8 +23,7 @@ namespace AspNetCoreAuthorization.Authorization.Middleware
                 options.AddPolicy("NoNameYet", new AuthorizationPolicy(
                     new List<IAuthorizationRequirement>()
                     {
-                        new MinimumAgeRequirement(18),
-                        new MustBeRandelOrGemRequirement()
+                        new MinimumAgeRequirement(18)
                     },
                     new List<string>()
                     {
