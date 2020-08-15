@@ -100,8 +100,8 @@ namespace AspNetCoreAuthorization
 
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-                //.RequireAuthorization(PoliciesConstants.AUTHENTICATED_USER, PoliciesConstants.IT_PROFESSIONAL);
+                    pattern: "{controller=Home}/{action=Index}/{id?}")
+                .RequireAuthorization(PoliciesConstants.AUTHENTICATED_USER, PoliciesConstants.IT_PROFESSIONAL);
             });
         }
     }
