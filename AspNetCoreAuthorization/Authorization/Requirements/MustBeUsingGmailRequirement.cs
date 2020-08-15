@@ -6,12 +6,7 @@ using System.Threading.Tasks;
 
 namespace AspNetCoreAuthorization.Authorization.Requirements
 {
-    public class MustBeRandelOrGemRequirement : IAuthorizationRequirement
+    public class MustBeUsingGmailRequirement : IAuthorizationRequirement
     {
-        public MustBeRandelOrGemRequirement()
-        {
-            // perhaps use IHttpContextAccesssor and get claims username/id 
-        }
-
     }
 }

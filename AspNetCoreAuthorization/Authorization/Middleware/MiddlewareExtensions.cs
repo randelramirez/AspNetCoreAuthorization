@@ -3,6 +3,7 @@ using AspNetCoreAuthorization.Authorization.Handlers;
 using AspNetCoreAuthorization.Authorization.Policies;
 using AspNetCoreAuthorization.Authorization.Requirements;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -16,10 +17,10 @@ namespace AspNetCoreAuthorization.Authorization.Middleware
     {
         public static IServiceCollection ConfigureApplicationAuthorization(this IServiceCollection services)
         {
-            services.AddAuthorization(option =>
+            services.AddAuthorization(options =>
             {
                 // Add policy: Add list of requirements, list of auth schemese
-                option.AddPolicy("NoNameYet", new AuthorizationPolicy(
+                options.AddPolicy("NoNameYet", new AuthorizationPolicy(
                     new List<IAuthorizationRequirement>()
                     {
                         new MinimumAgeRequirement(18),
@@ -32,8 +33,15 @@ namespace AspNetCoreAuthorization.Authorization.Middleware
                     }
                 ));
 
+                options.AddPolicy(PoliciesConstants.CAN_ACCESS_CONTROLLER, policyBuilder =>
+                {
+                    policyBuilder.Requirements.Add(new MustBeInSoftwareDevelopmentRequirement());
+                    policyBuilder.Requirements.Add(new MustBeUsingGmailRequirement());
+                    policyBuilder.AuthenticationSchemes.Add(IdentityConstants.ApplicationScheme);
+                });
+
                 // Add policy: Using policy builder
-                option.AddPolicy(PoliciesConstants.AUTHENTICATED_USER, policyBuilder =>
+                options.AddPolicy(PoliciesConstants.AUTHENTICATED_USER, policyBuilder =>
                 {
                     policyBuilder.RequireAuthenticatedUser();
                     policyBuilder.AuthenticationSchemes = new List<string>
@@ -42,9 +50,9 @@ namespace AspNetCoreAuthorization.Authorization.Middleware
                     };
                 });
 
-                option.AddPolicy(PoliciesConstants.IT_PROFESSIONAL, policyBuilder =>
+                options.AddPolicy(PoliciesConstants.IT_PROFESSIONAL, policyBuilder =>
                 {
-                    policyBuilder.RequireClaim(Constants.WORK, Constants.BA, Constants.SOFTWARE_ENGINEER);
+                    policyBuilder.RequireClaim(ClaimsConstants.WORK, ClaimsConstants.BA, ClaimsConstants.SOFTWARE_ENGINEER);
                     // Demo of adding Authentication scheme
                     policyBuilder.AuthenticationSchemes = new List<string>()
                     {
@@ -53,9 +61,9 @@ namespace AspNetCoreAuthorization.Authorization.Middleware
                 });
 
                 // DEV ONLY
-                option.AddPolicy(PoliciesConstants.DEV, policyBuilder =>
+                options.AddPolicy(PoliciesConstants.DEV, policyBuilder =>
                 {
-                    policyBuilder.RequireClaim(Constants.WORK, Constants.SOFTWARE_ENGINEER);
+                    policyBuilder.RequireClaim(ClaimsConstants.WORK, ClaimsConstants.SOFTWARE_ENGINEER);
                     // Demo of adding Authentication scheme
                     policyBuilder.AuthenticationSchemes = new List<string>()
                     {
@@ -64,9 +72,9 @@ namespace AspNetCoreAuthorization.Authorization.Middleware
                 });
 
                 // BA ONLY
-                option.AddPolicy(PoliciesConstants.BA, policyBuilder =>
+                options.AddPolicy(PoliciesConstants.BA, policyBuilder =>
                 {
-                    policyBuilder.RequireClaim(Constants.WORK, Constants.BA);
+                    policyBuilder.RequireClaim(ClaimsConstants.WORK, ClaimsConstants.BA);
                     // Demo of adding Authentication scheme
                     policyBuilder.AuthenticationSchemes = new List<string>()
                     {
@@ -74,17 +82,36 @@ namespace AspNetCoreAuthorization.Authorization.Middleware
                     };
                 });
 
-                option.AddPolicy(
+                options.AddPolicy(
                    PoliciesConstants.OLD_ENOUGH,
                    policyBuilder => policyBuilder.AddRequirements(
                        new MinimumAgeRequirement(18)
                    ));
 
+                options.AddPolicy(PoliciesConstants.CAN_EDIT_DATA, policyBuilder => policyBuilder.AddRequirements(new IsToDoOwnerRequirement()));
+
             });
 
+            // We use singleton because it doesn't have any dependency on its constructor
             services.AddSingleton<IAuthorizationHandler, MinimumAgeHandler>();
+
+            // These two are handlers for  MustBeInSoftwareDevelopmentRequirement (A Requirement can have multiple handlers, 
+            // but only need one handler to pass in order to satisfy the requirement)
+            // but for requirements, all requirements should be satisfied. Requirements = AND; Handlers = OR
+            services.AddSingleton<IAuthorizationHandler, IsBusinessAnalystHandler>();
+            services.AddSingleton<IAuthorizationHandler, IsDeveloperHandler>();
+
+            services.AddSingleton<IAuthorizationHandler, UserIsUsingGmailHandler>();
+
+            // We need EF Core DbContext for usermanager, IsToDoOwenerHandler has Scoped dependencies
+            services.AddScoped<IAuthorizationHandler, IsToDoOwenerHandler>();
 
             return services;
         }
+
+        //public static ControllerActionEndpointConventionBuilder MustHavePolicies(this ControllerActionEndpointConventionBuilder builder, params string[] policyNames)
+        //{
+        //    return builder.RequireAuthorization(policyNames);
+        //}
     }
 }

@@ -16,5 +16,10 @@ namespace AspNetCoreAuthorization.Authorization.Policies
         public const string BA = nameof(BA);
 
         public const string OLD_ENOUGH = nameof(OLD_ENOUGH);
+
+        public const string CAN_EDIT_DATA = nameof(CAN_EDIT_DATA);
+
+        public const string CAN_ACCESS_CONTROLLER = nameof(CAN_ACCESS_CONTROLLER);
+
     }
 }

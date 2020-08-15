@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AspNetCoreAuthorization.Authorization.Claims
 {
-    public static class Constants
+    public static class ClaimsConstants
     {
         public const string WORK = "Work";
 
